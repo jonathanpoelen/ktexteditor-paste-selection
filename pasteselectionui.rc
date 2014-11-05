@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui>
+<kpartplugin name="ktexteditor_pasteselection" library="ktexteditor_pasteselection" version="2">
+<MenuBar>
+ <Menu name="tools"><Text>&amp;Edit</Text>
+    <separator group="tools_operations" />
+    <Action name="tools_pasteselection" group="tools_operations"/>
+ </Menu>
+</MenuBar>
+</kpartplugin>
