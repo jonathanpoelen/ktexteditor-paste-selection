@@ -1,35 +1,32 @@
-#ifndef PASTESELECTIONPLUGIN_H
-#define PASTESELECTIONPLUGIN_H
+/**
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*
+* \author Jonathan Poelen <jonathan.poelen@gmail.com>
+*/
 
-#include <KTextEditor/Plugin>
+#ifndef KDEV_PASTE_SELECTION_PLUGIN_H
+#define KDEV_PASTE_SELECTION_PLUGIN_H
 
-namespace KTextEditor
+#include <kdevplatform/interfaces/iplugin.h>
+#include <QtCore/QVariant>
+
+class KDevPasteSelectionPlugin : public KDevelop::IPlugin
 {
-	class View;
-}
-
-class PasteSelectionView;
-
-class PasteSelectionPlugin
-  : public KTextEditor::Plugin
-{
-  public:
-    // Constructor
-    explicit PasteSelectionPlugin(QObject *parent = 0, const QVariantList &args = QVariantList());
-    // Destructor
-    virtual ~PasteSelectionPlugin();
-
-    void addView (KTextEditor::View *view);
-    void removeView (KTextEditor::View *view);
- 
-    void readConfig();
-    void writeConfig();
- 
-//     void readConfig (KConfig *);
-//     void writeConfig (KConfig *);
- 
-  private:
-    QList<class PasteSelectionView*> m_views;
+	Q_OBJECT
+public:
+	explicit KDevPasteSelectionPlugin(QObject *parent, const QVariantList &args = QVariantList());
+	virtual ~KDevPasteSelectionPlugin();
 };
 
 #endif

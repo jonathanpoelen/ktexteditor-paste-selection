@@ -1,36 +1,26 @@
 ktexteditor-paste-selection
 ===========================
 
-Katepart plugin (Kwrite, Kate, Kdevelop, ...) that adds keyboard shortcut for paste selection
+Keyboard shortcut to paste selection in KDevelop5.
 
+## Dependencies
 
-Dependencies
-------------
+- cmake
+- cmake-extras
+- kdelibs5-dev or kdelibs5-devel
+<!-- - kdevplatform-dev -->
+- clang++ or g++ with c++14 support
 
-Debian and derived:
- - kdelibs5-dev
-
-Other distros:
- - kdelibs5-devel
-
-
-Install
--------
-
-```sh
-mkdir build
-cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=$(kde4-config --prefix) -DQT_QMAKE_EXECUTABLE=/usr/bin/qmake-qt4
-make
-sudo make install
+```
+sudo apt install cmake cmake-extras kdelibs5-dev
 ```
 
-or
+## Install
 
-```sh
+```
 mkdir build
 cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=$(kde4-config --localprefix) -DQT_QMAKE_EXECUTABLE=/usr/bin/qmake-qt4
+cmake -DPLUGIN_INSTALL_DIR=/usr/lib/x86_64-linux-gnu/qt5/plugins/ -DCMAKE_BUILD_TYPE=Release ..
 make
-make install
+sudo make install
 ```

@@ -1,80 +1,72 @@
+/**
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*
+* \author Jonathan Poelen <jonathan.poelen@gmail.com>
+*/
+
 #include "pasteselectionplugin.h"
-#include "pasteselectionview.h"
+
+#include <kpluginfactory.h>
+#include <kactioncollection.h>
+#include <klocale.h>
+#include <kaboutdata.h>
+
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
 
 #include <KTextEditor/Document>
-#include <KTextEditor/View>
-
-#include <KPluginFactory>
-#include <KPluginLoader>
-#include <KLocale>
-#include <KAction>
-#include <KActionCollection>
 
 #include <QApplication>
 #include <QClipboard>
 
-K_PLUGIN_FACTORY(PasteSelectionPluginFactory, registerPlugin<PasteSelectionPlugin>("ktexteditor_pasteselection");)
-K_EXPORT_PLUGIN(PasteSelectionPluginFactory("ktexteditor_pasteselection", "ktexteditor_plugins"))
 
-PasteSelectionPlugin::PasteSelectionPlugin(QObject *parent, const QVariantList &args)
-: KTextEditor::Plugin(parent)
+K_PLUGIN_FACTORY_WITH_JSON(PasteSelectionFactory, "kdevpasteselection.json", registerPlugin<KDevPasteSelectionPlugin>();)
+
+namespace
 {
-	Q_UNUSED(args);
+  void pasteselection()
+  {
+    if (auto* doc = KDevelop::ICore::self()->documentController()->activeDocument())
+    {
+      doc->textDocument()->insertText(
+        doc->cursorPosition(),
+        QApplication::clipboard()->text(QClipboard::QClipboard::Selection)
+      );
+    }
+  }
 }
 
-PasteSelectionPlugin::~PasteSelectionPlugin()
+KDevPasteSelectionPlugin::KDevPasteSelectionPlugin(QObject *parent, const QVariantList &)
+:KDevelop::IPlugin("kdevpasteselection", parent)
 {
+	setXMLFile("kdevpasteselection.rc");
+
+	auto ac = actionCollection();
+	auto add_action = [ac,this](QString && name, char const * desc, auto act){
+    QAction* action = ac->addAction(qMove(name));
+    action->setText(i18n(desc));
+    connect(action, &QAction::triggered, this, act);
+    return action;
+  };
+
+  ac->setDefaultShortcut(add_action(
+    QStringLiteral("pasteselection"),
+    "Paste selection",
+    pasteselection
+  ), Qt::CTRL + Qt::SHIFT + Qt::Key_Insert);
 }
 
-void PasteSelectionPlugin::addView(KTextEditor::View *view)
-{
-	PasteSelectionView *nview = new PasteSelectionView(view);
-	m_views.append(nview);
-}
+KDevPasteSelectionPlugin::~KDevPasteSelectionPlugin() = default;
 
-void PasteSelectionPlugin::removeView(KTextEditor::View *view)
-{
-	for(int z = 0; z < m_views.size(); z++)
-	{
-		if(m_views.at(z)->parentClient() == view)
-		{
-			PasteSelectionView *nview = m_views.at(z);
-			m_views.removeAll(nview);
-			delete nview;
-		}
-	}
-}
-
-void PasteSelectionPlugin::readConfig()
-{
-}
-
-void PasteSelectionPlugin::writeConfig()
-{
-}
-
-PasteSelectionView::PasteSelectionView(KTextEditor::View *view)
-: QObject(view)
-, KXMLGUIClient(view)
-, m_view(view)
-{
-	setComponentData(PasteSelectionPluginFactory::componentData());
-
-	KAction *action = new KAction(i18n("Paste selection"), this);
-	actionCollection()->addAction("tools_pasteselection", action);
-	action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_Insert);
-	connect(action, SIGNAL(triggered()), this, SLOT(insertPasteSelection()));
-
-	setXMLFile("pasteselectionui.rc");
-}
-
-PasteSelectionView::~PasteSelectionView()
-{
-}
-
-void PasteSelectionView::insertPasteSelection()
-{
-	m_view->document()->insertText(m_view->cursorPosition(), QApplication::clipboard()->text(QClipboard::QClipboard::Selection));
-}
-
-#include "pasteselectionview.moc"
+#include "pasteselectionplugin.moc"

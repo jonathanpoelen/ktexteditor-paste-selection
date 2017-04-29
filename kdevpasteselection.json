@@ -1,0 +1,27 @@
+{
+  "GenericName": "PasteSelection",
+  "GenericName[x-test]": "xxPasteSelectionxx",
+  "KPlugin": {
+    "Authors": [
+      {
+        "Email": "jonathan.poelen@gmail.com",
+        "Name": "Jonathan Poelen",
+        "Name[x-test]": "xxJonathan Poelenxx"
+      }
+    ],
+    "Category": "Core",
+    "Description": "Keyboard shortcut key to paste selection",
+    "Description[fr]": "Raccourcie clavier pour coller la sélection",
+    "Description[x-test]": "xxKeyboard shortcut to paste selectionxx",
+    "Icon": "edit-paste",
+    "Id": "kdevpasteselection",
+    "License": "GPL",
+    "Name": "PasteSelection",
+    "ServiceTypes": [
+      "KDevelop/Plugin"
+    ],
+    "Version": "1.0"
+  },
+  "X-KDevelop-Category": "Global",
+  "X-KDevelop-Mode": "GUI"
+}

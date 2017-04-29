@@ -1,19 +1,49 @@
-project(ktexteditor_pasteselection)
+project(kdevpasteselection)
 
-find_package(KDE4 REQUIRED)
-include(KDE4Defaults)
-include_directories(${KDE4_INCLUDES} ${QT_INCLUDES})
-add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
+cmake_minimum_required(VERSION 2.8.12)
+# apt install cmake-extras
+find_package (ECM 0.0.9 REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
 
-set(ktexteditor_pasteselection_SRCS pasteselectionplugin.cpp)
+include(KDECompilerSettings NO_POLICY_SCOPE)
+#include(ECMAddTests)
+include(KDEInstallDirs)
+include(KDECMakeSettings)
 
-kde4_add_plugin(ktexteditor_pasteselection ${ktexteditor_pasteselection_SRCS})
+set(QT_MIN_VERSION "5.4.0")
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Widgets)
+#find_package(Qt5 REQUIRED Core Widgets Test)
 
-target_link_libraries(ktexteditor_pasteselection ${KDE4_KDEUI_LIBS} ${KDE4_KTEXTEDITOR_LIBS})
+set(KF5_DEP_VERSION "5.15.0") # pifometrie...
+find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
+  I18n
+  Service
+  XmlGui
+)
 
-install(TARGETS ktexteditor_pasteselection DESTINATION ${PLUGIN_INSTALL_DIR})
+find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
 
-install(FILES pasteselectionui.rc DESTINATION ${DATA_INSTALL_DIR}/ktexteditor_pasteselection)
+set(CMAKE_CXX_STANDARD 14)
 
-install(FILES ktexteditor_pasteselection.desktop DESTINATION ${SERVICES_INSTALL_DIR})
- 
+set(kdevpasteselection_PART_SRCS
+  pasteselectionplugin.cpp
+)
+
+qt5_add_resources(kdevpasteselection_PART_SRCS kdevpasteselection.qrc)
+kdevplatform_add_plugin(
+  kdevpasteselection
+  JSON kdevpasteselection.json
+  SOURCES ${kdevpasteselection_PART_SRCS}
+)
+target_link_libraries(kdevpasteselection
+  KDev::Interfaces
+  KDev::Shell
+)
+
+# install(
+#   TARGETS kdevpasteselection
+#   DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}
+#   PERMISSIONS OWNER_WRITE OWNER_READ GROUP_READ WORLD_READ
+# )
+
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
