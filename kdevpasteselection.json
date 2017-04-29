@@ -9,7 +9,7 @@
         "Name[x-test]": "xxJonathan Poelenxx"
       }
     ],
-    "Category": "Core",
+    "Category": "Utilities",
     "Description": "Keyboard shortcut key to paste selection",
     "Description[fr]": "Raccourcie clavier pour coller la sélection",
     "Description[x-test]": "xxKeyboard shortcut to paste selectionxx",

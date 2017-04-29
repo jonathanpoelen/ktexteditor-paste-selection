@@ -50,21 +50,19 @@ namespace
 KDevPasteSelectionPlugin::KDevPasteSelectionPlugin(QObject *parent, const QVariantList &)
 :KDevelop::IPlugin("kdevpasteselection", parent)
 {
-	setXMLFile("kdevpasteselection.rc");
+  setXMLFile("kdevpasteselection.rc");
 
-	auto ac = actionCollection();
-	auto add_action = [ac,this](QString && name, char const * desc, auto act){
+  auto ac = actionCollection();
+  auto addAction = [ac,this](QString && name, char const * desc, auto act){
     QAction* action = ac->addAction(qMove(name));
     action->setText(i18n(desc));
     connect(action, &QAction::triggered, this, act);
     return action;
   };
 
-  ac->setDefaultShortcut(add_action(
-    QStringLiteral("pasteselection"),
-    "Paste selection",
-    pasteselection
-  ), Qt::CTRL + Qt::SHIFT + Qt::Key_Insert);
+  QAction* paste = addAction(QStringLiteral("pasteselection"), "Paste selection", pasteselection);
+  paste->setIcon(QIcon::fromTheme(QStringLiteral("edit-paste")));
+  ac->setDefaultShortcut(paste, Qt::CTRL + Qt::SHIFT + Qt::Key_Insert);
 }
 
 KDevPasteSelectionPlugin::~KDevPasteSelectionPlugin() = default;
