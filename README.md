@@ -6,13 +6,14 @@ Keyboard shortcut to paste selection in KDevelop5.
 ## Dependencies
 
 - cmake
-- cmake-extras
+- extra-cmake-modules
+- gettext
 - kdelibs5-dev or kdelibs5-devel
 <!-- - kdevplatform-dev -->
 - clang++ or g++ with c++14 support
 
 ```
-sudo apt install cmake cmake-extras kdelibs5-dev
+sudo apt install cmake extra-cmake-modules gettext kdelibs5-dev
 ```
 
 ## Install
