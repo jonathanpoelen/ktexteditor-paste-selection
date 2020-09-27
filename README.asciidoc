@@ -1,3 +1,5 @@
+IMPORTANT: This shortcut exists natively in KTexteEditor 5.76.
+
 ktexteditor-paste-selection
 ===========================
 
